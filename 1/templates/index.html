@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Уязвимый Блокнот</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
+        .note { background: #f4f4f4; padding: 15px; margin-bottom: 10px; border-radius: 5px; position: relative; }
+        .delete-btn { color: red; text-decoration: none; float: right; }
+        form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        input, textarea, button { padding: 8px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <h1>Блокнот</h1>
+
+    <!-- Форма добавления -->
+    <form action="/add" method="POST">
+        <input type="text" name="title" placeholder="Заголовок заметки" required>
+        <textarea name="content" placeholder="Текст заметки..." rows="4" required></textarea>
+        <button type="submit">Добавить заметку</button>
+    </form>
+
+    <h2>Ваши заметки:</h2>
+    <div>
+        {% for note in notes %}
+            <div class="note">
+                <a href="/delete?id={{ note[0] }}" class="delete-btn">❌ Удалить</a>
+                <h3>{{ note[1] }}</h3>
+                <!-- XSS-уязвимость -->
+                <p>{{ note[2] | safe }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
