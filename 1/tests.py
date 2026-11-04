@@ -21,7 +21,7 @@ def test_sql_injection_delete_all():
     notes = soup.find_all(class_="note")
     
     # Если уязвимость сработала, список notes должен быть абсолютно пустым (длина 0)
-    assert len(notes) == 0, f"Уязвимость подтверждена! Найдено {len(notes)} элементов <div class='note'>, а должно быть 0."
+    assert len(notes) == 0, "Заметки не удалены"
 
 
 def test_stored_xss_vulnerability(page: Page):

@@ -28,8 +28,7 @@
             <div class="note">
                 <a href="/delete?id={{ note[0] }}" class="delete-btn">❌ Удалить</a>
                 <h3>{{ note[1] }}</h3>
-                <!-- XSS-уязвимость -->
-                <p>{{ note[2] | safe }}</p>
+                <p>{{ note[2] }}</p>
             </div>
         {% endfor %}
     </div>

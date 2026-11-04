@@ -66,13 +66,9 @@ def delete_note():
     
     conn = sqlite3.connect('notes.db')
     cursor = conn.cursor()
-    
-    # Уязвимость: конкатенация строк вместо параметризации (?,)
-    # Злоумышленник может манипулировать логикой запроса
-    query = f"DELETE FROM notes WHERE id = {note_id}"
-    
+   
     try:
-        cursor.executescript(query) # executescript позволяет выполнять цепочки команд через ';'
+        cursor.execute("DELETE FROM notes WHERE id = ?", (int(note_id),))
         conn.commit()
     except Exception as e:
         print(f"Ошибка выполнения SQL: {e}")
@@ -83,4 +79,4 @@ def delete_note():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, port=5000)
+    app.run(port=5000)
