@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты поиска</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f9f9f9; }
+        .container { max-width: 800px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .back-link { margin-top: 20px; display: inline-block; color: #007bff; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .sql-debug { background: #fff3cd; color: #856404; padding: 15px; font-family: monospace; border-left: 4px solid #ffc107; margin-bottom: 20px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Результаты выборки</h2>
+        
+        <div class="sql-debug">
+            <strong>Отправленный в БД SQL-запрос:</strong><br>
+            {{ executed_query }}
+        </div>
+
+        {% if rows %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Имя пользователя (username)</th>
+                        <th>Электронная почта (email)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Пользователи не найдены.</p>
+        {% endif %}
+        
+        <a class="back-link" href="/">← Назад к поиску</a>
+    </div>
+</body>
+</html>
