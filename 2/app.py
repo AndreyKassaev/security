@@ -4,7 +4,6 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 
-# Инициализация тестовой БД в оперативной памяти
 def init_db():
     conn = sqlite3.connect(":memory:", check_same_thread=False)
     cursor = conn.cursor()
@@ -40,7 +39,6 @@ db_conn = init_db()
 
 @app.route("/")
 def index():
-    # Рендерим файл templates/index.html
     return render_template("index.html")
 
 
@@ -48,23 +46,23 @@ def index():
 def search():
     user_input = request.args.get("username", "")
 
-    # УЯЗВИМОСТЬ: Прямая склейка строки запроса с вводом пользователя
-    query = (
-        f"SELECT username, email FROM users WHERE username = '{user_input}'"
-    )
+    # ЗАЩИТА 1: Используем плейсхолдер (?) вместо форматирования строки
+    query = "SELECT username, email FROM users WHERE username = ?"
 
     cursor = db_conn.cursor()
 
     try:
-        cursor.execute(query)
+        # ЗАЩИТА 2: Передаем пользовательский ввод отдельным кортежем
+        cursor.execute(query, (user_input,))
         rows = cursor.fetchall()
-    except Exception as e:
+        debug_info = f"Запрос: {query} | Параметр: '{user_input}'"
+    except Exception:
+        # ЗАЩИТА 3: Не выводим сырой текст ошибки БД пользователю
         rows = []
-        query = f"{query} | Ошибка SQL: {str(e)}"
+        debug_info = "Произошла внутренняя ошибка при обработке запроса."
 
-    # Передаем данные в шаблон templates/search.html
-    return render_template("search.html", rows=rows, executed_query=query)
+    return render_template("search.html", rows=rows, executed_query=debug_info)
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)
