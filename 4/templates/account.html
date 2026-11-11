@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('logout') }}" class="logout">Выйти</a>
+    <h2>Личный кабинет: {{ username }}</h2>
+    
+    <div class="profile-box">
+        <p><strong>Email:</strong> {{ user_data.email }}</p>
+        <p><strong>О себе:</strong></p>
+        <!-- УЯЗВИМОСТЬ №1 (Stored XSS) -->
+        <div>{{ user_data.bio | safe }}</div>
+    </div>
+
+    <h3>Редактировать профиль</h3>
+    <!-- УЯЗВИМОСТЬ №2 (CSRF) -->
+    <form method="POST" action="{{ url_for('update_profile') }}">
+        <label>Новый Email:</label>
+        <input type="email" name="email" value="{{ user_data.email }}" required>
+        
+        <label>Информация о себе (поддерживает HTML):</label>
+        <textarea name="bio" rows="4">{{ user_data.bio }}</textarea>
+        
+        <button type="submit" class="btn-success">Сохранить изменения</button>
+    </form>
+{% endblock %}

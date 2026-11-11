@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Учебное приложение{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; background-color: #f4f4f9; }
+        .container { margin: auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .container-sm { max-width: 400px; }
+        .container-md { max-width: 600px; }
+        textarea, input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        button { padding: 10px 20px; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-primary { width: 100%; background: #007BFF; }
+        .btn-success { background: #28a745; }
+        .error { color: #dc3545; }
+        .logout { float: right; color: #dc3545; text-decoration: none; }
+        .profile-box { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container {% block container_class %}container-md{% endblock %}">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
