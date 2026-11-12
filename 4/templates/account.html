@@ -10,12 +10,13 @@
         <p><strong>Email:</strong> {{ user_data.email }}</p>
         <p><strong>О себе:</strong></p>
         <!-- УЯЗВИМОСТЬ №1 (Stored XSS) -->
-        <div>{{ user_data.bio | safe }}</div>
+        <div>{{ user_data.bio }}</div>
     </div>
 
     <h3>Редактировать профиль</h3>
     <!-- УЯЗВИМОСТЬ №2 (CSRF) -->
     <form method="POST" action="{{ url_for('update_profile') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <label>Новый Email:</label>
         <input type="email" name="email" value="{{ user_data.email }}" required>
         

@@ -11,6 +11,7 @@
     {% endif %}
     
     <form method="POST" action="{{ url_for('login') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <input type="text" name="username" placeholder="Логин (например: user)" required>
         <input type="password" name="password" placeholder="Пароль (например: 123)" required>
         <button type="submit" class="btn-primary">Войти</button>

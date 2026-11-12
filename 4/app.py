@@ -1,8 +1,9 @@
 from flask import Flask, request, redirect, url_for, session, render_template
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_educational_key'
-
+csrf = CSRFProtect(app)
 # Имитация базы данных
 users_db = {
     'admin': {
@@ -70,7 +71,6 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    # Настройки для наглядной демонстрации уязвимостей
-    app.config['SESSION_COOKIE_HTTPONLY'] = False
-    app.config['SESSION_COOKIE_SAMESITE'] = None
-    app.run(debug=True, port=5000)
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    app.run(port=5000)
