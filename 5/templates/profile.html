@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<h2>Личный кабинет</h2>
+<p><b>Пользователь:</b> {{ user.full_name }}</p>
+<p><b>Логин:</b> {{ user.username }}</p>
+<p><b>Личная заметка:</b> {{ user.secret_note }}</p>
+
+<hr>
+
+<h3>Редактировать личную заметку</h3>
+<form method="post">
+    <p>
+        <input type="text" name="new_note" value="{{ user.secret_note }}" style="width: 100%; box-sizing: border-box;">
+    </p>
+    <button type="submit">Сохранить</button>
+</form>
+
+<p><a href="{{ url_for('logout') }}">Выйти из аккаунта</a></p>
+{% endblock %}
