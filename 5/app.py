@@ -29,8 +29,7 @@ def login():
         for uid, data in USERS.items():
             if data['username'] == username and data['password'] == password:
                 session['user_id'] = uid
-                # УЯЗВИМОСТЬ IDOR: ID пользователя передается открыто в URL
-                return redirect(url_for('profile', user_id=uid))
+                return redirect(url_for('profile'))
         error = "Неверный логин или пароль"
         
     return render_template('login.html', error=error)
@@ -41,12 +40,12 @@ def profile():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
-    # УЯЗВИМОСТЬ IDOR: берем ID из GET-параметра без сверки с session['user_id']
-    requested_id = request.args.get('user_id', type=int)
-    user = USERS.get(requested_id)
+    current_user_id = session['user_id']
+    user = USERS.get(current_user_id)
     
     if not user:
-        return "Пользователь не найден", 404
+        session.clear()
+        return redirect(url_for('login'))
 
     if request.method == 'POST':
         user['secret_note'] = request.form.get('new_note')
